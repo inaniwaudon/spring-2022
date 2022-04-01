@@ -7,6 +7,7 @@ interface Blossom {
   x: number;
   y: number;
   scale: number;
+  scaleDiff: number;
   r: number;
   g: number;
   b: number;
@@ -66,12 +67,14 @@ window.onload = () => {
               x,
               y,
               scale: Math.random() * 2,
+              scaleDiff:
+                Math.random() > 0.8 ? Math.random() * 0.016 - 0.008 + 1 : 1,
               r,
               g,
               b,
               alpha,
               angle: 180 + 20 + Math.random() * 140,
-              delay: Math.random() * 20 + 4,
+              delay: Math.random() * 30 + 4,
             });
           }
         }
@@ -94,14 +97,17 @@ window.onload = () => {
         return {
           ...blossom,
           x: blossom.x + Math.cos(radian) * distance,
-          y: blossom.y + Math.sin(radian) * distance + distance ** 2 * 0.002,
+          y: blossom.y + Math.sin(radian) * distance + distance ** 2 * 0.0018,
+          scale:
+            blossom.scale *
+            Math.pow(blossom.scaleDiff, Math.max(t - blossom.delay, 0)),
         };
       });
 
-    const draw = (blossoms: Blossom[]) => {
-      context.font = `10px "Zen Old Mincho"`;
-      context.drawImage(bgCanvas, 0, 0, canvas.width, canvas.height);
+    context.font = `10px "Zen Old Mincho"`;
 
+    const draw = (blossoms: Blossom[]) => {
+      context.drawImage(bgCanvas, 0, 0, canvas.width, canvas.height);
       // cherry blossoms
       for (const blossom of blossoms) {
         context.fillStyle = `rgba(${blossom.r}, ${blossom.g}, ${blossom.b}, ${blossom.alpha})`;
@@ -123,7 +129,7 @@ window.onload = () => {
       draw(blossoms);
       setTimeout(() => {
         loop(t + 1);
-      }, 300);
+      }, 200);
     };
     loop(0);
   };

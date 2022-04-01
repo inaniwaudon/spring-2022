@@ -62,12 +62,13 @@ window.onload = function () {
                             x: x,
                             y: y,
                             scale: Math.random() * 2,
+                            scaleDiff: Math.random() > 0.8 ? Math.random() * 0.016 - 0.008 + 1 : 1,
                             r: r,
                             g: g,
                             b: b,
                             alpha: alpha,
                             angle: 180 + 20 + Math.random() * 140,
-                            delay: Math.random() * 20 + 4
+                            delay: Math.random() * 30 + 4
                         });
                     }
                 }
@@ -84,11 +85,12 @@ window.onload = function () {
             return firstBlossoms.map(function (blossom) {
                 var radian = (2 * Math.PI * blossom.angle) / 360;
                 var distance = Math.max(t - blossom.delay, 0) * 20;
-                return __assign(__assign({}, blossom), { x: blossom.x + Math.cos(radian) * distance, y: blossom.y + Math.sin(radian) * distance + Math.pow(distance, 2) * 0.002 });
+                return __assign(__assign({}, blossom), { x: blossom.x + Math.cos(radian) * distance, y: blossom.y + Math.sin(radian) * distance + Math.pow(distance, 2) * 0.0018, scale: blossom.scale *
+                        Math.pow(blossom.scaleDiff, Math.max(t - blossom.delay, 0)) });
             });
         };
+        context.font = "10px \"Zen Old Mincho\"";
         var draw = function (blossoms) {
-            context.font = "10px \"Zen Old Mincho\"";
             context.drawImage(bgCanvas, 0, 0, canvas.width, canvas.height);
             // cherry blossoms
             for (var _i = 0, blossoms_1 = blossoms; _i < blossoms_1.length; _i++) {
@@ -108,7 +110,7 @@ window.onload = function () {
             draw(blossoms);
             setTimeout(function () {
                 loop(t + 1);
-            }, 300);
+            }, 200);
         };
         loop(0);
     };
